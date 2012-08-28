@@ -1,13 +1,15 @@
-package org.phpz.utils
+package org.phpz.slib.utils
 {
     import flash.external.ExternalInterface;
     
     /**
-     * JS 代理
+     * JS 类
      * @author Seven Yu
      */
-    public class JsProxy
+    public final class JSProxy
     {
+        private static var isInit:Boolean = false;
+        
         private static var jsFunc:String;
         private static var funcDict:Object = {};
         
@@ -15,10 +17,26 @@ package org.phpz.utils
          * 初始化
          * @param	fn  js 函数名
          */
-        public static function init(fn:String = null):void
+        public static function init(fn:String):void
         {
             jsFunc = fn;
-            available && ExternalInterface.addCallback('exec', run);
+            if (fn == null)
+            {
+                isInit = false;
+                return;
+            }
+            if (ExternalInterface.available)
+            {
+                try
+                {
+                    isInit = true;
+                    ExternalInterface.addCallback('exec', run);
+                }
+                catch (e:Error)
+                {
+                    isInit = false;
+                }
+            }
         }
         
         /**
@@ -31,8 +49,14 @@ package org.phpz.utils
         {
             if (available)
             {
-                //return ExternalInterface.call(jsFunc, func, args);
-                return ExternalInterface.call(jsFunc + '.' + func, args); // for old upload page js object
+                try
+                {
+                    return ExternalInterface.call(jsFunc + '.' + func, args);
+                }
+                catch (e:Error)
+                {
+                    return false;
+                }
             }
             return false;
         }
@@ -65,21 +89,10 @@ package org.phpz.utils
             funcDict[key] = func;
         }
         
-        /**
-         * 卸载 flash 方法
-         * @param	key    方法 id
-         */
-        public static function unregister(key:String):void
-        {
-            delete funcDict[key];
-        }
-        
-        /**
-         * js 是否可用
-         */
         public static function get available():Boolean
         {
-            return jsFunc && ExternalInterface.available;
+            trace('js proxy is init:', isInit);
+            return isInit && ExternalInterface.available;
         }
     
     }

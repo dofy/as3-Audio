@@ -1,16 +1,16 @@
-package org.phpz.utils
+package org.phpz.slib.utils
 {
     import flash.external.ExternalInterface;
     import flash.net.FileReference;
     import flash.system.Capabilities;
-    
+
     /**
-     * Tools
+     * ...
      * @author Seven Yu
      */
-    public class Tool
+    public class STool
     {
-        
+
         /**
          * 获取文件扩展名
          * @param	file      文件
@@ -28,7 +28,7 @@ package org.phpz.utils
                 return (withDot ? '.' : '') + file.name.split('.').pop().toLowerCase();
             }
         }
-        
+
         /**
          * 获取文件名
          * @param	file      文件
@@ -46,7 +46,7 @@ package org.phpz.utils
                 return file.name.substring(0, file.name.lastIndexOf('.'));
             }
         }
-        
+
         /**
          * 读取 Cookie
          * @param	key           键名
@@ -64,7 +64,7 @@ package org.phpz.utils
                     var len:int = items.length;
                     for (var i:int = 0; i < len; i++)
                     {
-                        var item:String = Tool.trim(items[i]);
+                        var item:String = SString.trim(items[i]);
                         if (0 == item.indexOf(key + '='))
                         {
                             return decodeURIComponent(item.split('=').pop());
@@ -79,7 +79,7 @@ package org.phpz.utils
             }
             return defaultValue;
         }
-        
+
         /**
          * 添加参数到地址
          * @param	url
@@ -107,48 +107,11 @@ package org.phpz.utils
          */
         public static function walkArray(array:Array, handler:Function):void
         {
-            for (var i:int = 0, len:int = array.length; i < len; i++)
+            for (var i:int = 0, len:int = array.length; i < len; i++) 
             {
                 handler(i, array[i]);
             }
         }
-        
-        /**
-         * trim
-         * @param	string
-         * @return
-         */
-        public static function trim(string:String, search:String = '\\s'):String
-        {
-            var reg:RegExp = new RegExp('^' + search + '+|' + search + '+$', 'g');
-            if (string)
-            {
-                return string.replace(reg, '');
-            }
-            else
-            {
-                return '';
-            }
-        }
-        
-        /**
-         * 格式化字符串
-         * formatString('This {0} a {1}.', 'is', 'test');
-         * // return This is a rest.
-         * @param	format     格式
-         * @param	... items  替换项
-         * @return  格式化后的字符串
-         */
-        public static function formatString(format:String, ... items):String
-        {
-            var reg:RegExp;
-            for (var i:int = 0, len:int = items.length; i < len; i++)
-            {
-                format = format.replace(new RegExp('\\{' + i + '\\}', 'g'), items[i]);
-            }
-            return format;
-        }
-        
         /**
          * 检测用户 Flash Player 版本号是否符合要求
          * @param	... vers 由大到小各版本号
@@ -159,11 +122,11 @@ package org.phpz.utils
             var verInfo:Array = Capabilities.version.split(' ');
             var system:String = verInfo[0];
             var userVer:Array = verInfo[1].split(','); // 用户 Player 版本号
-            
+
             for (var i:int = 0, pLen:int = userVer.length, cLen:int = vers.length; i < pLen && i < cLen; i++)
             {
                 var u:int = Math.floor(userVer[i]); // 用户对应版本号
-                var c:int = (/^[0-9]+$/.test(vers[i])) ? Math.floor(vers[i]) : 9999999; // 检测对应版本号
+                var c:int = (/^[0-9]+$/.test(vers[i])) ? Math.floor(vers[i]) : 9999999;    // 检测对应版本号
                 if (u > c)
                 {
                     return true;
@@ -175,7 +138,7 @@ package org.phpz.utils
             }
             return true;
         }
-    
+
     }
 
 }

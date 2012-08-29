@@ -31,6 +31,8 @@ package org.phpz.media
             var lc:LoaderContext = new LoaderContext(true);
             
             _sound = new Sound(ur, lc);
+            
+            _sound.play(
         }
         
         public function get url():String 

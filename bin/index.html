@@ -8,23 +8,48 @@
 	<script src="js/swfobject.js"></script>
 	<script>
 		var flashvars = {
+            fn: "audioJs"
 		};
 		var params = {
 			menu: "false",
 			scale: "noScale",
-			allowFullscreen: "true",
 			allowScriptAccess: "always",
 			bgcolor: "",
-			wmode: "direct" // can cause issues with FP settings & webcam
+			wmode: "window" // can cause issues with FP settings & webcam
 		};
 		var attributes = {
 			id:"Audio"
 		};
 		swfobject.embedSWF(
 			"Audio.swf", 
-			"altContent", "100%", "100%", "10.0.0", 
+			"altContent", "0", "0", "10.0.0", 
 			"expressInstall.swf", 
 			flashvars, params, attributes);
+        
+        var audioJs = {
+            on_start: function(data)
+            {
+                debug(data);
+            },
+            on_pause: function(data)
+            {
+                debug(data.position);
+            },
+            on_vol_changed: function(data)
+            {
+                debug(data.volume);
+            }
+        };
+        
+        function debug(msg)
+        {
+            document.getElementById('debug').innerHTML = msg;
+        }
+        
+        function callAudio(key, args)
+        {
+            document.getElementById('Audio').exec(key, args);
+        }
 	</script>
 	<style>
 		html, body { height:100%; overflow:hidden; }
@@ -32,6 +57,17 @@
 	</style>
 </head>
 <body>
+    <a href="javascript: callAudio('play', '01.mp3');">play</a>
+    <a href="javascript: callAudio('pause');">pause</a>
+    <a href="javascript: callAudio('resume');">resume</a>
+    <a href="javascript: callAudio('stop');">stop</a>
+    <a href="javascript: callAudio('vol', 0.3);">vol 0.3</a>
+    <a href="javascript: callAudio('vol', 0.6);">vol 0.6</a>
+    <a href="javascript: callAudio('vol', 0.9);">vol 0.9</a>
+    <a href="javascript: callAudio('mute');">mute</a>
+    
+    <div id="debug">debug</div>
+    
 	<div id="altContent">
 		<h1>Audio</h1>
 		<p><a href="http://www.adobe.com/go/getflashplayer">Get Adobe Flash player</a></p>

@@ -37,6 +37,7 @@ package org.phpz.media
             JSProxy.register('stop', stop);
             JSProxy.register('vol', vol);
             JSProxy.register('mute', mute);
+            JSProxy.register('position', position);
         }
         
         private function play(url:String):void 
@@ -67,6 +68,11 @@ package org.phpz.media
         private function mute():void 
         {
             mySound.mute();
+        }
+        
+        private function position(value:Number):void 
+        {
+            mySound.position = value;
         }
         
         private function bindEvents():void

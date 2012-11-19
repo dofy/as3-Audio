@@ -69,22 +69,24 @@ package org.phpz.media
             var ur:URLRequest = new URLRequest(url);
             var lc:SoundLoaderContext = new SoundLoaderContext(1000, true);
             
+            _sound = new Sound(ur, lc);
+            _sound.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
+            
+            playPosition(startTime);
+            
+            dispatchEvent(new AudioEvent(AudioEvent.ON_START));
+        }
+        
+        private function playPosition(startTime:Number):void 
+        {
             if (_sndChnl)
             {
                 _sndChnl.stop();
-                
                 _sndChnl.removeEventListener(Event.SOUND_COMPLETE, completeHandler);
-                _sound.removeEventListener(IOErrorEvent.IO_ERROR, errorHandler);
-                
-                _sndChnl = null;
-                _sound = null;
             }
-            
-            _sound = new Sound(ur, lc);
+                
             _sndChnl = _sound.play(startTime, 0, new SoundTransform(_vol));
-            
             _sndChnl.addEventListener(Event.SOUND_COMPLETE, completeHandler);
-            _sound.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
             
             _isPaused = false;
             _isPlaying = true;
@@ -92,18 +94,16 @@ package org.phpz.media
             _pos = startTime;
             
             _pgEvtTimer && _pgEvtTimer.start();
-            
-            dispatchEvent(new AudioEvent(AudioEvent.ON_START));
         }
         
         private function errorHandler(e:IOErrorEvent):void
         {
-            trace(e);
             dispatchEvent(e);
         }
         
         private function completeHandler(e:Event):void
         {
+            _pgEvtTimer && _pgEvtTimer.stop();
             dispatchEvent(new AudioEvent(AudioEvent.ON_COMPLETE));
         }
         
@@ -119,7 +119,7 @@ package org.phpz.media
             _pgEvtTimer && _pgEvtTimer.stop();
             
             _pos = _sndChnl.position;
-            dispatchEvent(new AudioEvent(AudioEvent.ON_PAUSE, { position: _pos } ));
+            dispatchEvent(new AudioEvent(AudioEvent.ON_PAUSE, {position: _pos}));
             
             _sndChnl.stop();
         }
@@ -133,8 +133,8 @@ package org.phpz.media
             
             _isPaused = false;
             
-            _pgEvtTimer && _pgEvtTimer.start();
-            _sndChnl = _sound.play(_pos, 0, new SoundTransform(_vol));
+            playPosition(_pos)
+            
             dispatchEvent(new AudioEvent(AudioEvent.ON_RESUME));
         }
         
@@ -166,6 +166,13 @@ package org.phpz.media
         public function get position():Number
         {
             return _sndChnl ? _sndChnl.position : 0;
+        }
+        
+        public function set position(value:Number):void
+        {
+            value = Math.min(this.length, Math.max(0, value));
+            
+            playPosition(value);
         }
         
         public function mute():void

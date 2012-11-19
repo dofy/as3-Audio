@@ -29,11 +29,11 @@
         var audioJs = {
             on_start: function(data)
             {
-                debug(data);
+                debug(['start', data]);
             },
             on_pause: function(data)
             {
-                debug(data.position);
+                debug(['pause', data.position]);
             },
             on_progress: function(data)
             {
@@ -41,7 +41,11 @@
             },
             on_vol_changed: function(data)
             {
-                debug(data.volume);
+                debug(['volume', data.volume]);
+            },
+            on_complete: function(data)
+            {
+                debug(['complete', data]);
             }
         };
         

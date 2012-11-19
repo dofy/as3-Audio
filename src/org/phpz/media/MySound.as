@@ -45,7 +45,7 @@ package org.phpz.media
             {
                 case AudioEvent.ON_PROGRESS: 
                 {
-                    _pgEvtTimer = new Timer(300);
+                    _pgEvtTimer = new Timer(200);
                     _pgEvtTimer.addEventListener(TimerEvent.TIMER, timerHandler);
                     _pgEvtTimer.start();
                     break;
@@ -59,7 +59,7 @@ package org.phpz.media
         
         private function timerHandler(e:TimerEvent):void
         {
-            dispatchEvent(new AudioEvent(AudioEvent.ON_PROGRESS, {position: this.position}));
+            dispatchEvent(new AudioEvent(AudioEvent.ON_PROGRESS, {position: this.position, length: this.length}));
         }
         
         public function play(url:String, startTime:Number = 0):void

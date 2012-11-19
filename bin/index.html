@@ -35,6 +35,10 @@
             {
                 debug(data.position);
             },
+            on_progress: function(data)
+            {
+                debug([Math.ceil(data.position) / 1000, Math.ceil(data.length) / 1000].join('/'));
+            },
             on_vol_changed: function(data)
             {
                 debug(data.volume);

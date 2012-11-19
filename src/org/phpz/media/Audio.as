@@ -74,6 +74,7 @@ package org.phpz.media
             mySound.addEventListener(AudioEvent.ON_START, handler);
             mySound.addEventListener(AudioEvent.ON_PAUSE, handler);
             mySound.addEventListener(AudioEvent.ON_VOL_CHANGED, handler);
+            mySound.addEventListener(AudioEvent.ON_PROGRESS, handler);
         }
         
         private function handler(e:AudioEvent):void 

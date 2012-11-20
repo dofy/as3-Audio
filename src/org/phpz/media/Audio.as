@@ -35,7 +35,7 @@ package org.phpz.media
             JSProxy.register('pause', pause);
             JSProxy.register('resume', resume);
             JSProxy.register('stop', stop);
-            JSProxy.register('vol', vol);
+            JSProxy.register('volume', volume);
             JSProxy.register('mute', mute);
             JSProxy.register('position', position);
         }
@@ -60,9 +60,9 @@ package org.phpz.media
             mySound.stop();
         }
         
-        private function vol(value:Number):void 
+        private function volume(value:Number):void 
         {
-            mySound.vol = value;
+            mySound.volume = value;
         }
         
         private function mute():void 
@@ -77,11 +77,25 @@ package org.phpz.media
         
         private function bindEvents():void
         {
+            if (!JSProxy.available)
+            {
+                return;
+            }
             mySound.addEventListener(AudioEvent.ON_START, handler);
             mySound.addEventListener(AudioEvent.ON_PAUSE, handler);
-            mySound.addEventListener(AudioEvent.ON_VOL_CHANGED, handler);
+            mySound.addEventListener(AudioEvent.ON_RESUME, handler);
+            mySound.addEventListener(AudioEvent.ON_STOP, handler);
+            
             mySound.addEventListener(AudioEvent.ON_PROGRESS, handler);
             mySound.addEventListener(AudioEvent.ON_COMPLETE, handler);
+            
+            mySound.addEventListener(AudioEvent.ON_MUTE, handler);
+            mySound.addEventListener(AudioEvent.ON_VOL_CHANGED, handler);
+            
+            mySound.addEventListener(AudioEvent.ON_IO_ERROR, handler);
+            
+            mySound.addEventListener(AudioEvent.ON_LOAD_PROGRESS, handler);
+            mySound.addEventListener(AudioEvent.ON_LOAD_COMPLETE, handler);
         }
         
         private function handler(e:AudioEvent):void 
@@ -93,9 +107,19 @@ package org.phpz.media
         {
             CONFIG::debug
             {
-                mySound.play('01.mp3');
+                var index:int = 1;
                 
-                stage.addEventListener(MouseEvent.CLICK, function(evt:MouseEvent):void { mySound.play('01.mp3');} );
+                mySound.play('0.mp3');
+                
+                stage.addEventListener(MouseEvent.CLICK, 
+                    function(evt:MouseEvent):void
+                    {
+                        if (++index > 2)
+                        {
+                            index = 1;
+                        }
+                        mySound.play(index + '.mp3');
+                    } );
             }
         }
     }

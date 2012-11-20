@@ -29,29 +29,54 @@
         var audioJs = {
             on_start: function(data)
             {
-                debug(['start', data]);
+                debug(3, ['start', data.url, data.position, data.length]);
             },
             on_pause: function(data)
             {
-                debug(['pause', data.position]);
+                debug(3, ['pause', data.position, data.length]);
+            },
+            on_resume: function(data)
+            {
+                debug(3, ['resume', data.position, data.length]);
+            },
+            on_stop: function(data)
+            {
+                debug(3, ['stop', data.position, data.length]);
             },
             on_progress: function(data)
             {
-                debug([Math.ceil(data.position) / 1000, Math.ceil(data.length) / 1000].join('/'));
-            },
-            on_vol_changed: function(data)
-            {
-                debug(['volume', data.volume]);
+                debug(1, [Math.ceil(data.position) / 1000, Math.ceil(data.length) / 1000].join('/'));
             },
             on_complete: function(data)
             {
-                debug(['complete', data]);
+                callAudio('play', '2.mp3');
+                debug(3, ['complete', data.url]);
+            },
+            on_vol_changed: function(data)
+            {
+                debug(3, ['volume', data.volume]);
+            },
+            on_mute: function(data)
+            {
+                debug(3, ['mute', data.volume]);
+            },
+            on_io_error: function(data)
+            {
+                debug(3, ['io error', data.text]);
+            },
+            on_load_progress: function(data)
+            {
+                debug(2, [data.bytesLoaded, data.bytesTotal].join('/'));
+            },
+            on_load_complete: function(data)
+            {
+                debug(2, ['load complete', data.bytesTotal]);
             }
         };
         
-        function debug(msg)
+        function debug(id, msg)
         {
-            document.getElementById('debug').innerHTML = msg;
+            document.getElementById('debug' + id).innerHTML = msg;
         }
         
         function callAudio(key, args)
@@ -60,25 +85,27 @@
         }
 	</script>
 	<style>
-		html, body { height:100%; overflow:hidden; }
-		body { margin:0; }
+		body { font: 1em "courier new"; line-height: 2em; }
 	</style>
 </head>
 <body>
-    <a href="javascript: callAudio('play', '01.mp3');">play 01</a>
-    <a href="javascript: callAudio('play', '02.mp3');">play 02</a>
+    <a href="javascript: callAudio('play', '1.mp3');">play 1</a>
+    <a href="javascript: callAudio('play', '2.mp3');">play 2</a>
     <a href="javascript: callAudio('position', 10000);">position 10s</a>
+    <a href="javascript: callAudio('position', 190000);">position 190s</a>
     <br />
     <a href="javascript: callAudio('pause');">pause</a>
     <a href="javascript: callAudio('resume');">resume</a>
     <a href="javascript: callAudio('stop');">stop</a>
     <br />
-    <a href="javascript: callAudio('vol', 0.3);">vol 0.3</a>
-    <a href="javascript: callAudio('vol', 0.6);">vol 0.6</a>
-    <a href="javascript: callAudio('vol', 0.9);">vol 0.9</a>
+    <a href="javascript: callAudio('volume', 0.3);">volume 0.3</a>
+    <a href="javascript: callAudio('volume', 0.6);">volume 0.6</a>
+    <a href="javascript: callAudio('volume', 0.9);">volume 0.9</a>
     <a href="javascript: callAudio('mute');">mute</a>
     
-    <div id="debug">debug</div>
+    <div id="debug1">...</div>
+    <div id="debug2">...</div>
+    <div id="debug3">...</div>
     
 	<div id="altContent">
 		<h1>Audio</h1>

@@ -15,10 +15,18 @@ package org.phpz.media.events
         public static const ON_PAUSE:String = 'on_pause';
         public static const ON_RESUME:String = 'on_resume';
         public static const ON_STOP:String = 'on_stop';
+        
         public static const ON_PROGRESS:String = 'on_progress';
         public static const ON_COMPLETE:String = 'on_complete';
+        
         public static const ON_VOL_CHANGED:String = 'on_vol_changed';
         public static const ON_MUTE:String = 'on_mute';
+        
+        public static const ON_IO_ERROR:String = 'on_io_error';
+        
+        public static const ON_LOAD_PROGRESS:String = 'on_load_progress';
+        public static const ON_LOAD_COMPLETE:String = 'on_load_complete';
+        
         
         public function AudioEvent(type:String, data:Object = null, bubbles:Boolean = false, cancelable:Boolean = false)
         {
